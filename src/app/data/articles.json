@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "nom": "Fusil d'assaut AK-47",
+    "type": "Type 3",
+    "descriptionCourte": "Fusil d'assaut automatique de calibre 7.62mm",
+    "descriptionLongue": "Le AK-47 est un fusil d'assaut automatique développé par Mikhaïl Kalachnikov. Il est connu pour sa fiabilité et sa simplicité d'utilisation. Utilisé dans de nombreux conflits à travers le monde.",
+    "image": "/images/ak47.jpg",
+    "stock": 11
+  },
+  {
+    "id": 2,
+    "nom": "Pistolet Glock 17",
+    "type": "Arme de poing",
+    "descriptionCourte": "Pistolet semi-automatique de calibre 9mm",
+    "descriptionLongue": "Le Glock 17 est un pistolet semi-automatique autrichien. Il est apprécié pour sa légèreté, sa fiabilité et sa grande capacité de chargeur.",
+    "image": "/images/glock17.jpg",
+    "stock": 8
+  },
+  {
+    "id": 3,
+    "nom": "Fusil de précision M24",
+    "type": "Arme de précision",
+    "descriptionCourte": "Fusil de sniper de calibre 7.62mm",
+    "descriptionLongue": "Le M24 est un fusil de précision militaire américain. Il offre une excellente précision à longue distance et est utilisé par les forces spéciales.",
+    "image": "/images/m24.jpg",
+    "stock": 0
+  },
+  {
+    "id": 4,
+    "nom": "Mitrailleuse M249",
+    "type": "Arme automatique",
+    "descriptionCourte": "Mitrailleuse légère de calibre 5.56mm",
+    "descriptionLongue": "La M249 est une mitrailleuse légère américaine. Elle fournit un appui-feu soutenu et est utilisée par l'infanterie pour couvrir les mouvements.",
+    "image": "/images/m249.jpg",
+    "stock": 5
+  },
+  {
+    "id": 5,
+    "nom": "Lance-grenades M203",
+    "type": "Arme de support",
+    "descriptionCourte": "Lance-grenades sous-tube de 40mm",
+    "descriptionLongue": "Le M203 est un lance-grenades qui se monte sous le canon d'un fusil d'assaut. Il permet de lancer des grenades à fragmentation ou à fumée.",
+    "image": "/images/m203.jpg",
+    "stock": 12
+  },
+  {
+    "id": 6,
+    "nom": "Bomba atomique",
+    "type": "Type 2",
+    "descriptionCourte": "C'est une bombe",
+    "descriptionLongue": "C'est une bombe de zinzin qui explose et.boummm",
+    "image": "",
+    "stock": 12
+  }
+]

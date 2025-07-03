@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "email": "admin@armement.fr",
+    "password": "admin123",
+    "nom": "Administrateur",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "email": "user@armement.fr",
+    "password": "user123",
+    "nom": "Utilisateur Standard",
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "nom": "Pelletier Paul",
+    "email": "paul.pelletier@gmail.com",
+    "password": "Test2024",
+    "role": "admin"
+  },
+  {
+    "id": 5,
+    "nom": "Test",
+    "email": "jules.ekmek@hotmail.fr",
+    "password": "test123",
+    "role": "admin"
+  },
+  {
+    "id": 6,
+    "nom": "john ",
+    "email": "j.ekmek@hotmail.fr",
+    "password": "test2024",
+    "role": "user"
+  }
+]
