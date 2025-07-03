@@ -1,15 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useMemo } from 'react';
 import Navigation from '@/components/Navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import CatalogueControls from '@/components/CatalogueControls';
+import ArticleCard from '@/components/ArticleCard';
+import EmptyState from '@/components/EmptyState';
 import { Article } from '@/types';
+
+type SortOption = 'name-asc' | 'name-desc' | 'stock-asc' | 'stock-desc';
+type ViewMode = 'grid' | 'list';
 
 export default function CataloguePage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // États pour les filtres et tri
+  const [selectedType, setSelectedType] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   useEffect(() => {
     fetchArticles();
@@ -30,6 +40,42 @@ export default function CataloguePage() {
       setLoading(false);
     }
   };
+
+  // Extraire tous les types uniques d'articles
+  const availableTypes = useMemo(() => {
+    const types = articles.map(article => article.type);
+    return ['all', ...Array.from(new Set(types))];
+  }, [articles]);
+
+  // Filtrer et trier les articles
+  const filteredAndSortedArticles = useMemo(() => {
+    let filtered = articles;
+    
+    // Filtrage par type
+    if (selectedType !== 'all') {
+      filtered = articles.filter(article => article.type === selectedType);
+    }
+    
+    // Tri
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'name-asc':
+          return a.nom.localeCompare(b.nom);
+        case 'name-desc':
+          return b.nom.localeCompare(a.nom);
+        case 'stock-asc':
+          return a.stock - b.stock;
+        case 'stock-desc':
+          return b.stock - a.stock;
+        default:
+          return 0;
+      }
+    });
+    
+    return sorted;
+  }, [articles, selectedType, sortBy]);
+
+
 
   if (loading) {
     return (
@@ -60,65 +106,39 @@ export default function CataloguePage() {
                 {error}
               </div>
             )}
+
+            {/* Contrôles de filtrage et tri */}
+            <CatalogueControls
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              availableTypes={availableTypes}
+              filteredCount={filteredAndSortedArticles.length}
+            />
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {articles.map((article) => (
-                <div
-                  key={article.id}
-                  className="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="h-48 bg-gray-200 flex items-center justify-center">
-                    <div className="text-gray-500 text-center p-4">
-                      <div className="text-4xl mb-2">🔫</div>
-                      <p className="text-sm">{article.nom}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {article.nom}
-                    </h3>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {article.type}
-                      </span>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        article.stock > 10 
-                          ? 'bg-green-100 text-green-800' 
-                          : article.stock > 0 
-                          ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        Stock: {article.stock}
-                      </span>
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {article.descriptionCourte}
-                    </p>
-                    
-                    <Link
-                      href={`/catalogue/${article.id}`}
-                      className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                    >
-                      Voir les détails
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {articles.length === 0 && !error && (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">📦</div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Aucun article disponible
-                </h3>
-                <p className="text-gray-600">
-                  Le catalogue est vide pour le moment.
-                </p>
+            {/* Affichage des articles */}
+            {viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredAndSortedArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} viewMode={viewMode} />
+                ))}
               </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredAndSortedArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} viewMode={viewMode} />
+                ))}
+              </div>
+            )}
+            
+            {filteredAndSortedArticles.length === 0 && !error && (
+              <EmptyState 
+                selectedType={selectedType} 
+                onResetFilter={() => setSelectedType('all')} 
+              />
             )}
           </div>
         </div>
