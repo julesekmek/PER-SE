@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function LoginPage() {
         if (user.role === 'admin') {
           router.push('/admin/utilisateurs');
         } else {
-          router.push('/catalogue');
+          router.push('/marketplace');
         }
       }, 0);
       
@@ -54,7 +55,7 @@ export default function LoginPage() {
         if (currentUser?.role === 'admin') {
           router.push('/admin/utilisateurs');
         } else {
-          router.push('/catalogue');
+          router.push('/marketplace');
         }
       } else {
         setError('Email ou mot de passe incorrect');

@@ -35,6 +35,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (articleData.prix < 0) {
+      return NextResponse.json(
+        { error: 'Le prix ne peut pas être négatif' },
+        { status: 400 }
+      );
+    }
+
     const newArticle: Article = {
       id: generateId(articles),
       ...articleData

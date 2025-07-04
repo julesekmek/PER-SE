@@ -15,7 +15,7 @@ export default function EmptyState({ selectedType, onResetFilter }: EmptyStatePr
       <p className="text-gray-600 mb-4">
         {selectedType !== 'all' 
           ? `Aucun article de type "${selectedType}" n'est disponible.`
-          : 'Le catalogue est vide pour le moment.'
+          : 'Le marketplace est vide pour le moment.'
         }
       </p>
       {selectedType !== 'all' && (

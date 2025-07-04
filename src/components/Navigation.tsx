@@ -86,7 +86,7 @@ export default function Navigation() {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               <Link 
-                href="/catalogue" 
+                href="/marketplace" 
                 className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
               >
                 Marketplace
@@ -102,10 +102,10 @@ export default function Navigation() {
                     Gestion Utilisateurs
                   </Link>
                   <Link 
-                    href="/admin/catalogue" 
+                    href="/admin/marketplace" 
                     className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
                   >
-                    Gestion Catalogue
+                    Gestion Marketplace
                   </Link>
                 </>
               )}
@@ -235,7 +235,7 @@ export default function Navigation() {
           <div className="md:hidden border-t border-blue-800">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link 
-                href="/catalogue" 
+                href="/marketplace" 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:bg-blue-800"
               >
@@ -252,11 +252,11 @@ export default function Navigation() {
                     Gestion Utilisateurs
                   </Link>
                   <Link 
-                    href="/admin/catalogue" 
+                    href="/admin/marketplace" 
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:bg-blue-800"
                   >
-                    Gestion Catalogue
+                    Gestion Marketplace
                   </Link>
                 </>
               )}

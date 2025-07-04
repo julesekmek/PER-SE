@@ -395,7 +395,7 @@ export default function AdminMarketplacePage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-green-600">
+                        <span className="text-sm font-medium text-gray-900">
                           {formatPrice(article.prix)}
                         </span>
                       </td>

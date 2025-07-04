@@ -48,7 +48,7 @@ export async function PUT(
       );
     }
 
-    const { nom, type, descriptionCourte, descriptionLongue, image, stock } = await request.json();
+    const { nom, type, descriptionCourte, descriptionLongue, image, stock, prix } = await request.json();
     const articles = getArticles();
     const articleIndex = articles.findIndex(a => a.id === articleId);
 
@@ -75,6 +75,14 @@ export async function PUT(
       );
     }
 
+    // Vérifier le prix
+    if (prix !== undefined && prix < 0) {
+      return NextResponse.json(
+        { error: 'Le prix ne peut pas être négatif' },
+        { status: 400 }
+      );
+    }
+
     // Mettre à jour l'article
     articles[articleIndex] = {
       ...articles[articleIndex],
@@ -83,7 +91,8 @@ export async function PUT(
       descriptionCourte: descriptionCourte || articles[articleIndex].descriptionCourte,
       descriptionLongue: descriptionLongue || articles[articleIndex].descriptionLongue,
       image: image || articles[articleIndex].image,
-      stock: stock !== undefined ? stock : articles[articleIndex].stock
+      stock: stock !== undefined ? stock : articles[articleIndex].stock,
+      prix: prix !== undefined ? prix : articles[articleIndex].prix
     };
 
     const success = saveArticles(articles);

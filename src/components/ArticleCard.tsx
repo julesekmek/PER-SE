@@ -14,6 +14,15 @@ export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
     return 'bg-red-100 text-red-800';
   };
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
   if (viewMode === 'grid') {
     return (
       <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300 flex flex-col">
@@ -38,12 +47,18 @@ export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
             </span>
           </div>
           
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">
+          <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
             {article.descriptionCourte}
           </p>
+
+          <div className="mb-4">
+            <span className="text-2xl font-bold text-gray-900">
+              {formatPrice(article.prix)}
+            </span>
+          </div>
           
           <Link
-            href={`/catalogue/${article.id}`}
+            href={`/marketplace/${article.id}`}
             className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors mt-auto"
           >
             Voir les détails
@@ -57,7 +72,7 @@ export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row">
-        <div className="w-full sm:w-48 h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
+        <div className="w-full sm:w-48 h-48 sm:h-auto bg-gray-200 flex items-center justify-center flex-shrink-0">
           <div className="text-gray-500 text-center p-4">
             <div className="text-4xl mb-2">🔫</div>
             <p className="text-sm">{article.nom}</p>
@@ -84,9 +99,15 @@ export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
               </span>
             </div>
           </div>
+
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-2xl font-bold text-gray-900">
+              {formatPrice(article.prix)}
+            </span>
+          </div>
           
           <Link
-            href={`/catalogue/${article.id}`}
+            href={`/marketplace/${article.id}`}
             className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
           >
             Voir les détails

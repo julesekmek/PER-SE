@@ -14,6 +14,7 @@ export interface Article {
   descriptionLongue: string;
   image: string;
   stock: number;
+  prix: number;
 }
 
 export interface AuthContextType {

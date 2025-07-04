@@ -2,10 +2,10 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, ReactNode } from 'react';
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
+  children: ReactNode;
   requiredRole?: 'admin' | 'user';
 }
 
@@ -19,12 +19,12 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
       return;
     }
 
-    if (requiredRole && user?.role !== requiredRole) {
-      // Rediriger selon le rôle de l'utilisateur
-      if (user?.role === 'admin') {
+    if (requiredRole && user && user.role !== requiredRole) {
+      // Rediriger vers la page appropriée selon le rôle
+      if (user.role === 'admin') {
         router.push('/admin/utilisateurs');
       } else {
-        router.push('/catalogue');
+        router.push('/marketplace');
       }
     }
   }, [isAuthenticated, user, requiredRole, router]);
@@ -32,23 +32,17 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
   // Afficher un loader pendant la vérification
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Vérification de l'authentification...</p>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
       </div>
     );
   }
 
-  // Vérifier le rôle requis
-  if (requiredRole && user?.role !== requiredRole) {
+  // Vérifier le rôle si requis
+  if (requiredRole && user && user.role !== requiredRole) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Accès refusé</h1>
-          <p className="text-gray-600">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
       </div>
     );
   }

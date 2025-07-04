@@ -116,7 +116,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-3xl font-bold text-green-600">
+                    <span className="text-3xl font-bold text-gray-900">
                       {formatPrice(article.prix)}
                     </span>
                   </div>
@@ -158,7 +158,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                       Prix
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      <span className="text-xl font-bold text-green-600">
+                      <span className="text-xl font-bold text-gray-900">
                         {formatPrice(article.prix)}
                       </span>
                     </dd>
