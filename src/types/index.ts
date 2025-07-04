@@ -17,6 +17,27 @@ export interface Article {
   prix: number;
 }
 
+export interface CartItem {
+  articleId: number;
+  quantity: number;
+}
+
+export type OrderStatus = 'En attente de validation' | 'En cours' | 'Expédié' | 'Reçu';
+
+export interface Order {
+  id: string;
+  userId: number;
+  date: string;
+  articles: Array<{
+    articleId: number;
+    nom: string;
+    quantity: number;
+    stock: number;
+    prix: number;
+  }>;
+  statut: OrderStatus;
+}
+
 export interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;

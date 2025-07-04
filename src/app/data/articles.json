@@ -1,15 +1,5 @@
 [
   {
-    "id": 1,
-    "nom": "Fusil d'assaut AK-47",
-    "type": "Type 3",
-    "descriptionCourte": "Fusil d'assaut automatique de calibre 7.62mm",
-    "descriptionLongue": "Le AK-47 est un fusil d'assaut automatique développé par Mikhaïl Kalachnikov. Il est connu pour sa fiabilité et sa simplicité d'utilisation. Utilisé dans de nombreux conflits à travers le monde.",
-    "image": "/images/ak47.jpg",
-    "stock": 4,
-    "prix": 24.98
-  },
-  {
     "id": 2,
     "nom": "Pistolet Glock 17",
     "type": "Arme de poing",
@@ -17,7 +7,7 @@
     "descriptionLongue": "Le Glock 17 est un pistolet semi-automatique autrichien. Il est apprécié pour sa légèreté, sa fiabilité et sa grande capacité de chargeur.",
     "image": "/images/glock17.jpg",
     "stock": 8,
-    "prix": 800
+    "prix": 80.2
   },
   {
     "id": 3,
@@ -27,7 +17,7 @@
     "descriptionLongue": "Le M24 est un fusil de précision militaire américain. Il offre une excellente précision à longue distance et est utilisé par les forces spéciales.",
     "image": "/images/m24.jpg",
     "stock": 0,
-    "prix": 4500
+    "prix": 4500.2
   },
   {
     "id": 4,
@@ -57,7 +47,7 @@
     "descriptionLongue": "C'est une bombe de zinzin qui explose et.boummm",
     "image": "",
     "stock": 12,
-    "prix": 15000000
+    "prix": 150000
   },
   {
     "id": 7,

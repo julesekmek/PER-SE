@@ -180,8 +180,8 @@ export default function AdminMarketplacePage() {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(price);
   };
 
@@ -344,7 +344,8 @@ export default function AdminMarketplacePage() {
             )}
 
             {/* Liste des articles */}
-            <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div className="bg-white shadow overflow-visible sm:rounded-md">
+              <div className="overflow-x-auto overflow-y-visible">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -367,7 +368,7 @@ export default function AdminMarketplacePage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {articles.map((article) => (
-                    <tr key={article.id}>
+                    <tr key={article.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
@@ -395,28 +396,37 @@ export default function AdminMarketplacePage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-green-600">
+                        <span className="text-sm font-medium text-gray-900">
                           {formatPrice(article.prix)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleEdit(article)}
-                          className="text-blue-600 hover:text-blue-900 mr-4"
-                        >
-                          Modifier
-                        </button>
-                        <button
-                          onClick={() => handleDelete(article.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Supprimer
-                        </button>
+                        <div className="flex space-x-3">
+                          <button
+                            onClick={() => handleEdit(article)}
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-md text-blue-600 hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                            title="Modifier l'article"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(article.id)}
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-md text-red-600 hover:text-red-800 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                            title="Supprimer l'article"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
             </div>
           </div>
         </div>

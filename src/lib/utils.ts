@@ -10,14 +10,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Formate un prix en euros
+ * Formate un prix en euros avec 2 décimales
  */
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(price);
 }
 

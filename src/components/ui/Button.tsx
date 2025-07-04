@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'ghost' | 'disabled';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   children: React.ReactNode;
@@ -12,7 +12,9 @@ const buttonVariants = {
   primary: 'bg-blue-900 hover:bg-blue-800 text-white border-transparent focus:ring-blue-500',
   secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-300 focus:ring-gray-500',
   danger: 'bg-red-600 hover:bg-red-700 text-white border-transparent focus:ring-red-500',
+  warning: 'bg-yellow-600 hover:bg-yellow-700 text-white border-transparent focus:ring-yellow-500',
   ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 border-gray-300 focus:ring-gray-500',
+  disabled: 'bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed',
 };
 
 const buttonSizes = {
@@ -38,7 +40,7 @@ export default function Button({
         buttonSizes[size],
         className
       )}
-      disabled={disabled || isLoading}
+      disabled={disabled || isLoading || variant === 'disabled'}
       {...props}
     >
       {isLoading && (

@@ -14,17 +14,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Vérifier l'authentification au chargement
   useEffect(() => {
     const initializeAuth = () => {
+      console.log('🔐 Initialisation de l\'authentification...');
       try {
         const savedUser = localStorage.getItem('user');
+        console.log('📦 Données utilisateur dans localStorage:', savedUser ? 'présentes' : 'absentes');
+        
         if (savedUser) {
           const userData = JSON.parse(savedUser);
-          setUser(userData);
-          setIsAuthenticated(true);
+          console.log('👤 Données utilisateur parsées:', userData);
+          
+          // Validation basique des données utilisateur
+          if (userData && userData.id && userData.nom && userData.email && userData.role) {
+            setUser(userData);
+            setIsAuthenticated(true);
+            console.log('✅ Utilisateur authentifié avec succès');
+          } else {
+            console.warn('⚠️ Données utilisateur invalides, suppression du localStorage');
+            localStorage.removeItem('user');
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        } else {
+          console.log('ℹ️ Aucun utilisateur trouvé dans localStorage');
+          setUser(null);
+          setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error('Erreur lors de la récupération des données utilisateur:', error);
+        console.error('❌ Erreur lors de la récupération des données utilisateur:', error);
         localStorage.removeItem('user');
+        setUser(null);
+        setIsAuthenticated(false);
       } finally {
+        console.log('🏁 Fin de l\'initialisation de l\'authentification');
         setIsLoading(false);
       }
     };
@@ -33,6 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    console.log('🔑 Tentative de connexion pour:', email);
+    
     // Validation des entrées
     if (!email || !password) {
       return { success: false, error: 'Email et mot de passe requis' };
@@ -58,23 +81,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        console.log('✅ Connexion réussie:', data.user);
         setUser(data.user);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(data.user));
         return { success: true };
       } else {
+        console.log('❌ Échec de connexion:', data.error);
         return { success: false, error: data.error || 'Erreur de connexion' };
       }
     } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
+      console.error('❌ Erreur lors de la connexion:', error);
       return { success: false, error: 'Erreur de connexion au serveur' };
     }
   };
 
   const logout = () => {
+    console.log('🚪 Déconnexion en cours...');
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('user');
+    localStorage.removeItem('armement-cart');
+    console.log('✅ Déconnexion terminée');
   };
 
   const updateProfile = async (nom: string, email: string, password?: string): Promise<{ success: boolean; message: string }> => {

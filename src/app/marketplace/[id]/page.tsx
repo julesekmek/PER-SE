@@ -6,6 +6,10 @@ import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Article } from '@/types';
 import { notFound } from 'next/navigation';
+import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNotifications } from '@/contexts/NotificationContext';
+import Button from '@/components/ui/Button';
 
 interface ArticleDetailPageProps {
   params: Promise<{
@@ -17,6 +21,11 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  
+  const { addToCart, getItemQuantity, isInCart } = useCart();
+  const { user } = useAuth();
+  const { showNotification } = useNotifications();
   
   // Attendre les paramètres avec React.use()
   const resolvedParams = use(params);
@@ -48,9 +57,30 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(price);
+  };
+
+  const handleAddToCart = () => {
+    if (!user) {
+      showNotification('error', 'Vous devez être connecté pour ajouter des articles au panier');
+      return;
+    }
+
+    if (quantity <= 0) {
+      showNotification('error', 'La quantité doit être supérieure à 0');
+      return;
+    }
+
+    if (quantity > article!.stock) {
+      showNotification('error', `Stock insuffisant. Disponible: ${article!.stock}`);
+      return;
+    }
+
+    addToCart(article!.id, quantity);
+    showNotification('success', `${quantity} article(s) ajouté(s) au panier`);
+    setQuantity(1);
   };
 
   if (loading) {
@@ -103,6 +133,8 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                 {error}
               </div>
             )}
+
+
 
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
               <div className="px-4 py-5 sm:px-6">
@@ -198,6 +230,50 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                 </dl>
               </div>
             </div>
+
+            {/* Section Ajouter au panier */}
+            {user && article.stock > 0 && (
+              <div className="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
+                <div className="px-4 py-5 sm:px-6">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Ajouter au panier
+                  </h3>
+                </div>
+                <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center space-x-4">
+                      <label htmlFor="quantity" className="text-sm font-medium text-gray-700">
+                        Quantité:
+                      </label>
+                      <input
+                        id="quantity"
+                        type="number"
+                        min="1"
+                        max={article.stock}
+                        value={quantity}
+                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="w-20 px-3 py-2 border-2 border-gray-400 rounded-md text-sm bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-50 transition-colors"
+                        aria-label={`Quantité pour ${article.nom} (max: ${article.stock})`}
+                        title={`Sélectionnez la quantité pour ${article.nom} (maximum: ${article.stock})`}
+                      />
+                      {isInCart(article.id) && (
+                        <span className="text-sm text-blue-600 font-medium">
+                          Déjà {getItemQuantity(article.id)} dans le panier
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      onClick={handleAddToCart}
+                      disabled={article.stock === 0}
+                      className="w-full sm:w-auto"
+                      variant={article.stock === 0 ? 'disabled' : 'primary'}
+                    >
+                      {article.stock === 0 ? 'Rupture de stock' : 'Ajouter au panier'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="mt-8 flex justify-center">
               <Link

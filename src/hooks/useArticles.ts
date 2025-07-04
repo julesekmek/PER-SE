@@ -12,6 +12,21 @@ interface UseArticlesReturn {
   availableTypes: string[];
 }
 
+// Fonction pour récupérer tous les articles
+export const getArticles = async (): Promise<Article[]> => {
+  try {
+    const response = await fetch('/api/articles');
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error('Erreur lors du chargement des articles');
+    }
+  } catch (error) {
+    console.error('Erreur lors du chargement des articles:', error);
+    return [];
+  }
+};
+
 export function useArticles(
   selectedType: string = 'all',
   sortBy: SortOption = 'name-asc'

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Authentification</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .info { background: #e3f2fd; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #e8f5e8; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Authentification - PER SE SYSTEMS</h1>
+    
+    <div id="status" class="info">
+        <h3>État actuel :</h3>
+        <div id="currentStatus">Chargement...</div>
+    </div>
+
+    <div id="actions">
+        <h3>Actions :</h3>
+        <button onclick="checkLocalStorage()">Vérifier localStorage</button>
+        <button onclick="clearLocalStorage()">Vider localStorage</button>
+        <button onclick="setTestUser()">Définir utilisateur test</button>
+        <button onclick="goToApp()">Aller à l'application</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        function checkLocalStorage() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>📦 Contenu localStorage :</h3>';
+            
+            try {
+                const user = localStorage.getItem('user');
+                const cart = localStorage.getItem('armement-cart');
+                
+                results.innerHTML += `
+                    <div class="info">
+                        <strong>Utilisateur :</strong> ${user ? 'Présent' : 'Absent'}<br>
+                        <strong>Panier :</strong> ${cart ? 'Présent' : 'Absent'}
+                    </div>
+                `;
+                
+                if (user) {
+                    try {
+                        const userData = JSON.parse(user);
+                        results.innerHTML += `
+                            <div class="success">
+                                <strong>Données utilisateur :</strong><br>
+                                <pre>${JSON.stringify(userData, null, 2)}</pre>
+                            </div>
+                        `;
+                    } catch (e) {
+                        results.innerHTML += `
+                            <div class="error">
+                                <strong>Erreur parsing JSON :</strong> ${e.message}
+                            </div>
+                        `;
+                    }
+                }
+            } catch (e) {
+                results.innerHTML += `
+                    <div class="error">
+                        <strong>Erreur localStorage :</strong> ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearLocalStorage() {
+            try {
+                localStorage.removeItem('user');
+                localStorage.removeItem('armement-cart');
+                document.getElementById('results').innerHTML = 
+                    '<div class="success">✅ localStorage vidé avec succès</div>';
+                updateStatus();
+            } catch (e) {
+                document.getElementById('results').innerHTML = 
+                    `<div class="error">❌ Erreur : ${e.message}</div>`;
+            }
+        }
+
+        function setTestUser() {
+            try {
+                const testUser = {
+                    id: "test-123",
+                    nom: "Test User",
+                    email: "test@example.com",
+                    role: "user"
+                };
+                localStorage.setItem('user', JSON.stringify(testUser));
+                document.getElementById('results').innerHTML = 
+                    '<div class="success">✅ Utilisateur test défini</div>';
+                updateStatus();
+            } catch (e) {
+                document.getElementById('results').innerHTML = 
+                    `<div class="error">❌ Erreur : ${e.message}</div>`;
+            }
+        }
+
+        function goToApp() {
+            window.location.href = 'http://localhost:3000';
+        }
+
+        function updateStatus() {
+            const statusDiv = document.getElementById('currentStatus');
+            try {
+                const user = localStorage.getItem('user');
+                if (user) {
+                    const userData = JSON.parse(user);
+                    statusDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Utilisateur connecté : ${userData.nom} (${userData.role})
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="info">
+                            ℹ️ Aucun utilisateur connecté
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                statusDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Erreur : ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Initialisation
+        updateStatus();
+    </script>
+</body>
+</html> 

@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface BadgeProps {
-  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'primary';
   size?: 'sm' | 'md';
   children: React.ReactNode;
   className?: string;
@@ -14,6 +14,7 @@ const badgeVariants = {
   warning: 'bg-yellow-100 text-yellow-800',
   danger: 'bg-red-100 text-red-800',
   info: 'bg-gray-100 text-gray-800',
+  primary: 'bg-blue-600 text-white',
 };
 
 const badgeSizes = {
