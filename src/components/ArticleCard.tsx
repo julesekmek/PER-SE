@@ -1,61 +1,64 @@
 import React from 'react';
 import Link from 'next/link';
 import { Article } from '@/types';
+import { formatPrice } from '@/lib/utils';
+import Badge from '@/components/ui/Badge';
 
 interface ArticleCardProps {
   article: Article;
   viewMode: 'grid' | 'list';
 }
 
+function ArticleImage({ article }: { article: Article }) {
+  return (
+    <div className="h-48 bg-gray-200 flex items-center justify-center">
+      <div className="text-gray-500 text-center p-4">
+        <div className="text-4xl mb-2">🔫</div>
+        <p className="text-sm">{article.nom}</p>
+      </div>
+    </div>
+  );
+}
+
+function ArticleBadges({ article }: { article: Article }) {
+  return (
+    <div className="flex items-center justify-between mb-3">
+      <Badge variant="default">{article.type}</Badge>
+      <Badge variant={article.stock > 10 ? 'success' : article.stock > 0 ? 'warning' : 'danger'}>
+        Stock: {article.stock}
+      </Badge>
+    </div>
+  );
+}
+
+function ArticlePrice({ price }: { price: number }) {
+  return (
+    <div className="mb-4">
+      <span className="text-2xl font-bold text-gray-900">
+        {formatPrice(price)}
+      </span>
+    </div>
+  );
+}
+
 export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
-  const getStockColor = (stock: number) => {
-    if (stock > 10) return 'bg-green-100 text-green-800';
-    if (stock > 0) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
   if (viewMode === 'grid') {
     return (
       <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300 flex flex-col">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-gray-500 text-center p-4">
-            <div className="text-4xl mb-2">🔫</div>
-            <p className="text-sm">{article.nom}</p>
-          </div>
-        </div>
+        <ArticleImage article={article} />
         
         <div className="p-6 flex flex-col flex-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             {article.nom}
           </h3>
           
-          <div className="flex items-center justify-between mb-3">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              {article.type}
-            </span>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStockColor(article.stock)}`}>
-              Stock: {article.stock}
-            </span>
-          </div>
+          <ArticleBadges article={article} />
           
           <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
             {article.descriptionCourte}
           </p>
 
-          <div className="mb-4">
-            <span className="text-2xl font-bold text-gray-900">
-              {formatPrice(article.prix)}
-            </span>
-          </div>
+          <ArticlePrice price={article.prix} />
           
           <Link
             href={`/marketplace/${article.id}`}
@@ -91,12 +94,10 @@ export default function ArticleCard({ article, viewMode }: ArticleCardProps) {
             </div>
             
             <div className="flex flex-col sm:items-end gap-2 mb-4 sm:mb-0">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                {article.type}
-              </span>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStockColor(article.stock)}`}>
+              <Badge variant="default">{article.type}</Badge>
+              <Badge variant={article.stock > 10 ? 'success' : article.stock > 0 ? 'warning' : 'danger'}>
                 Stock: {article.stock}
-              </span>
+              </Badge>
             </div>
           </div>
 

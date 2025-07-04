@@ -1,89 +1,36 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import MarketplaceControls from '@/components/MarketplaceControls';
 import ArticleCard from '@/components/ArticleCard';
 import EmptyState from '@/components/EmptyState';
-import { Article } from '@/types';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Alert from '@/components/ui/Alert';
+import { useArticles } from '@/hooks/useArticles';
 
 type SortOption = 'name-asc' | 'name-desc' | 'stock-asc' | 'stock-desc' | 'price-asc' | 'price-desc';
 type ViewMode = 'grid' | 'list';
 
 export default function MarketplacePage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  
   // États pour les filtres et tri
   const [selectedType, setSelectedType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
-  useEffect(() => {
-    fetchArticles();
-  }, []);
-
-  const fetchArticles = async () => {
-    try {
-      const response = await fetch('/api/articles');
-      if (response.ok) {
-        const data = await response.json();
-        setArticles(data);
-      } else {
-        setError('Erreur lors du chargement des articles');
-      }
-    } catch (error) {
-      setError('Erreur lors du chargement des articles');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Extraire tous les types uniques d'articles
-  const availableTypes = useMemo(() => {
-    const types = articles.map(article => article.type);
-    return ['all', ...Array.from(new Set(types))];
-  }, [articles]);
-
-  // Filtrer et trier les articles
-  const filteredAndSortedArticles = useMemo(() => {
-    let filtered = articles;
-    
-    // Filtrage par type
-    if (selectedType !== 'all') {
-      filtered = articles.filter(article => article.type === selectedType);
-    }
-    
-    // Tri
-    const sorted = [...filtered].sort((a, b) => {
-      switch (sortBy) {
-        case 'name-asc':
-          return a.nom.localeCompare(b.nom);
-        case 'name-desc':
-          return b.nom.localeCompare(a.nom);
-        case 'stock-asc':
-          return a.stock - b.stock;
-        case 'stock-desc':
-          return b.stock - a.stock;
-        case 'price-asc':
-          return a.prix - b.prix;
-        case 'price-desc':
-          return b.prix - a.prix;
-        default:
-          return 0;
-      }
-    });
-    
-    return sorted;
-  }, [articles, selectedType, sortBy]);
+  const {
+    loading,
+    error,
+    filteredAndSortedArticles,
+    availableTypes,
+  } = useArticles(selectedType, sortBy);
 
   if (loading) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
+            <LoadingSpinner size="lg" />
           </div>
         </div>
       </ProtectedRoute>
@@ -100,9 +47,9 @@ export default function MarketplacePage() {
             </h1>
             
             {error && (
-              <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+              <Alert type="error" className="mb-6">
                 {error}
-              </div>
+              </Alert>
             )}
 
             {/* Contrôles de filtrage et tri */}

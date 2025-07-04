@@ -4,6 +4,93 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import { User } from '@/types';
+
+interface UserMenuProps {
+  user: User;
+  isOpen: boolean;
+  onToggle: () => void;
+  onLogout: () => void;
+  onCompteClick: () => void;
+  isMobile?: boolean;
+}
+
+function UserMenu({ user, isOpen, onToggle, onLogout, onCompteClick, isMobile = false }: UserMenuProps) {
+  return (
+    <div className="relative">
+      <button
+        onClick={onToggle}
+        className={cn(
+          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300",
+          isMobile ? "hover:bg-blue-800" : "hover:bg-blue-800"
+        )}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+      >
+        <div className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white font-semibold">
+          {user.nom.charAt(0).toUpperCase()}
+        </div>
+        {!isMobile && <span className="hidden sm:block">{user.nom}</span>}
+        <svg
+          className={cn("w-4 h-4 transition-transform", isOpen ? "rotate-180" : "")}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-[9999] border border-gray-200">
+          <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+            <div className="font-medium">{user.nom}</div>
+            <div className="text-gray-500 capitalize">{user.role}</div>
+          </div>
+          
+          <Link
+            href="/compte"
+            onClick={onCompteClick}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100"
+          >
+            → Mon compte
+          </Link>
+          
+          <button
+            onClick={onLogout}
+            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:bg-red-50"
+          >
+            → Déconnexion
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface NavigationLinkProps {
+  href: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  isMobile?: boolean;
+}
+
+function NavigationLink({ href, children, onClick, isMobile = false }: NavigationLinkProps) {
+  const baseClasses = "rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300";
+  const mobileClasses = "block px-3 py-2 text-base hover:bg-blue-800 focus:bg-blue-800";
+  const desktopClasses = "px-3 py-2 hover:bg-blue-800";
+
+  return (
+    <Link 
+      href={href} 
+      onClick={onClick}
+      className={cn(baseClasses, isMobile ? mobileClasses : desktopClasses)}
+    >
+      {children}
+    </Link>
+  );
+}
 
 export default function Navigation() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -12,44 +99,22 @@ export default function Navigation() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    console.log('=== DÉBUT DÉCONNEXION ===');
-    console.log('handleLogout called');
-    console.log('Current user:', user);
-    console.log('Current isAuthenticated:', isAuthenticated);
-    
-    try {
-      console.log('Calling logout function...');
-      logout();
-      console.log('Logout function completed');
-      
-      console.log('Pushing to /login...');
-      router.push('/login');
-      console.log('Router push completed');
-      
-      console.log('Closing menus...');
-      setIsUserMenuOpen(false);
-      setIsMobileMenuOpen(false);
-      console.log('Menus closed');
-      
-      console.log('=== FIN DÉCONNEXION ===');
-    } catch (error) {
-      console.error('Error in handleLogout:', error);
-    }
+    logout();
+    router.push('/login');
+    setIsUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
   };
 
   const handleMenuToggle = () => {
-    console.log('Menu toggle clicked, current state:', isUserMenuOpen);
     setIsUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleLogoutClick = () => {
-    console.log('Logout button clicked!');
-    handleLogout();
+  const handleCompteClick = () => {
+    setIsUserMenuOpen(false);
   };
 
-  const handleCompteClick = () => {
-    console.log('Compte button clicked!');
-    setIsUserMenuOpen(false);
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   // Fermer le menu mobile quand on redimensionne l'écran
@@ -85,131 +150,49 @@ export default function Navigation() {
           {/* Navigation principale - Desktop */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link 
-                href="/marketplace" 
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
+              <NavigationLink href="/marketplace">
                 Marketplace
-              </Link>
+              </NavigationLink>
 
               {/* Liens admin */}
               {user.role === 'admin' && (
                 <>
-                  <Link 
-                    href="/admin/utilisateurs" 
-                    className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  >
+                  <NavigationLink href="/admin/utilisateurs">
                     Gestion Utilisateurs
-                  </Link>
-                  <Link 
-                    href="/admin/marketplace" 
-                    className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  >
+                  </NavigationLink>
+                  <NavigationLink href="/admin/marketplace">
                     Gestion Marketplace
-                  </Link>
+                  </NavigationLink>
                 </>
               )}
             </div>
           </div>
 
           {/* Menu utilisateur - Desktop */}
-          <div className="hidden md:block relative">
-            <button
-              onClick={handleMenuToggle}
-              className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-              aria-expanded={isUserMenuOpen}
-              aria-haspopup="true"
-            >
-              <div className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white font-semibold">
-                {user.nom.charAt(0).toUpperCase()}
-              </div>
-              <span className="hidden sm:block">{user.nom}</span>
-              <svg
-                className={`w-4 h-4 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {isUserMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-[9999] border border-gray-200">
-                <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                  <div className="font-medium">{user.nom}</div>
-                  <div className="text-gray-500 capitalize">{user.role}</div>
-                </div>
-                
-                <Link
-                  href="/compte"
-                  onClick={handleCompteClick}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100"
-                >
-                  → Mon compte
-                </Link>
-                
-                <button
-                  onClick={handleLogoutClick}
-                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:bg-red-50"
-                >
-                  → Déconnexion
-                </button>
-              </div>
-            )}
+          <div className="hidden md:block">
+            <UserMenu
+              user={user}
+              isOpen={isUserMenuOpen}
+              onToggle={handleMenuToggle}
+              onLogout={handleLogout}
+              onCompteClick={handleCompteClick}
+            />
           </div>
 
-          {/* Bouton menu mobile */}
+          {/* Boutons mobile */}
           <div className="md:hidden flex items-center space-x-2">
-            {/* Menu utilisateur mobile */}
-            <div className="relative">
-              <button
-                onClick={handleMenuToggle}
-                className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-                aria-expanded={isUserMenuOpen}
-                aria-haspopup="true"
-              >
-                <div className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.nom.charAt(0).toUpperCase()}
-                </div>
-                <svg
-                  className={`w-4 h-4 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-[9999] border border-gray-200">
-                  <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                    <div className="font-medium">{user.nom}</div>
-                    <div className="text-gray-500 capitalize">{user.role}</div>
-                  </div>
-                  
-                  <Link
-                    href="/compte"
-                    onClick={handleCompteClick}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100"
-                  >
-                    → Mon compte
-                  </Link>
-                  
-                  <button
-                    onClick={handleLogoutClick}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:bg-red-50"
-                  >
-                    → Déconnexion
-                  </button>
-                </div>
-              )}
-            </div>
+            <UserMenu
+              user={user}
+              isOpen={isUserMenuOpen}
+              onToggle={handleMenuToggle}
+              onLogout={handleLogout}
+              onCompteClick={handleCompteClick}
+              isMobile
+            />
 
             {/* Bouton menu burger */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={handleMobileMenuToggle}
               className="p-2 rounded-md text-white hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
               aria-expanded={isMobileMenuOpen}
               aria-label="Menu principal"
@@ -234,30 +217,30 @@ export default function Navigation() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-blue-800">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <Link 
+              <NavigationLink 
                 href="/marketplace" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:bg-blue-800"
+                isMobile
               >
                 Marketplace
-              </Link>
+              </NavigationLink>
 
               {user.role === 'admin' && (
                 <>
-                  <Link 
+                  <NavigationLink 
                     href="/admin/utilisateurs" 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:bg-blue-800"
+                    isMobile
                   >
                     Gestion Utilisateurs
-                  </Link>
-                  <Link 
+                  </NavigationLink>
+                  <NavigationLink 
                     href="/admin/marketplace" 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800 transition-colors focus:outline-none focus:bg-blue-800"
+                    isMobile
                   >
                     Gestion Marketplace
-                  </Link>
+                  </NavigationLink>
                 </>
               )}
             </div>

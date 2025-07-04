@@ -33,5 +33,12 @@
     "email": "j.ekmek@hotmail.fr",
     "password": "test2024",
     "role": "user"
+  },
+  {
+    "id": 7,
+    "nom": "Test",
+    "email": "test@gmail.com",
+    "password": "test2024",
+    "role": "admin"
   }
 ]

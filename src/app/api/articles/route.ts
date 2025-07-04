@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getArticles, saveArticles, generateId } from '@/lib/data';
+import { getArticles, saveArticles } from '@/lib/data';
+import { generateId } from '@/lib/utils';
 import { Article } from '@/types';
 
 export async function GET() {

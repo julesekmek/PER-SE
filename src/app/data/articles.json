@@ -58,5 +58,15 @@
     "image": "",
     "stock": 12,
     "prix": 15000000
+  },
+  {
+    "id": 7,
+    "nom": "test post opti",
+    "type": "Type",
+    "descriptionCourte": "Des",
+    "descriptionLongue": "Desc detaille",
+    "image": "",
+    "stock": 12,
+    "prix": 1222
   }
 ]
