@@ -20,5 +20,6 @@ export interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateProfile: (nom: string, email: string, password?: string) => Promise<{ success: boolean; message: string }>;
   isAuthenticated: boolean;
 } 

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Article } from '@/types';
-import Navigation from '@/components/Navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function AdminCataloguePage() {
@@ -153,11 +152,24 @@ export default function AdminCataloguePage() {
     setIsEditing(null);
   };
 
+  const handleCancel = () => {
+    setIsAdding(false);
+    setIsEditing(null);
+    setFormData({
+      nom: '',
+      type: '',
+      descriptionCourte: '',
+      descriptionLongue: '',
+      image: '',
+      stock: 0
+    });
+    setError('');
+    setSuccess('');
+  };
+
   return (
     <ProtectedRoute requiredRole="admin">
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="flex justify-between items-center mb-8">
@@ -201,7 +213,8 @@ export default function AdminCataloguePage() {
                         type="text"
                         value={formData.nom}
                         onChange={(e) => setFormData({...formData, nom: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: AK-47, M16, Glock 17..."
                         required
                       />
                     </div>
@@ -214,7 +227,8 @@ export default function AdminCataloguePage() {
                         type="text"
                         value={formData.type}
                         onChange={(e) => setFormData({...formData, type: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: Fusil d'assaut, Pistolet, Sniper..."
                         required
                       />
                     </div>
@@ -228,7 +242,8 @@ export default function AdminCataloguePage() {
                         min="0"
                         value={formData.stock}
                         onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value) || 0})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: 50"
                         required
                       />
                     </div>
@@ -241,8 +256,8 @@ export default function AdminCataloguePage() {
                         type="text"
                         value={formData.image}
                         onChange={(e) => setFormData({...formData, image: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="/images/article.jpg"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: /images/ak47.jpg ou URL complète"
                       />
                     </div>
                   </div>
@@ -255,7 +270,8 @@ export default function AdminCataloguePage() {
                       value={formData.descriptionCourte}
                       onChange={(e) => setFormData({...formData, descriptionCourte: e.target.value})}
                       rows={2}
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                      placeholder="Description courte de l'arme (calibre, portée, etc.)"
                       required
                     />
                   </div>
@@ -268,7 +284,8 @@ export default function AdminCataloguePage() {
                       value={formData.descriptionLongue}
                       onChange={(e) => setFormData({...formData, descriptionLongue: e.target.value})}
                       rows={4}
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                      placeholder="Description détaillée : caractéristiques techniques, historique, utilisation..."
                       required
                     />
                   </div>
@@ -276,7 +293,7 @@ export default function AdminCataloguePage() {
                   <div className="flex justify-end space-x-3">
                     <button
                       type="button"
-                      onClick={resetForm}
+                      onClick={handleCancel}
                       className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                     >
                       Annuler

@@ -6,7 +6,7 @@
     "descriptionCourte": "Fusil d'assaut automatique de calibre 7.62mm",
     "descriptionLongue": "Le AK-47 est un fusil d'assaut automatique développé par Mikhaïl Kalachnikov. Il est connu pour sa fiabilité et sa simplicité d'utilisation. Utilisé dans de nombreux conflits à travers le monde.",
     "image": "/images/ak47.jpg",
-    "stock": 11
+    "stock": 9
   },
   {
     "id": 2,

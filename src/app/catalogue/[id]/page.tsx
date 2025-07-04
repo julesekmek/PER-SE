@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Article } from '@/types';
 import { notFound } from 'next/navigation';
@@ -49,7 +48,6 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50">
-          <Navigation />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
           </div>
@@ -65,8 +63,6 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        
         <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             {/* Breadcrumb */}
@@ -77,7 +73,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                     href="/catalogue"
                     className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
                   >
-                    Catalogue
+                    Marketplace
                   </Link>
                 </li>
                 <li>
@@ -179,7 +175,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
                 href="/catalogue"
                 className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               >
-                ← Retour au catalogue
+                ← Retour au marketplace
               </Link>
             </div>
           </div>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { User } from '@/types';
-import Navigation from '@/components/Navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function AdminUtilisateursPage() {
@@ -155,11 +154,23 @@ export default function AdminUtilisateursPage() {
     // Ne pas réinitialiser isAdding ici
   };
 
+  const handleCancel = () => {
+    setIsAdding(false);
+    setIsEditing(null);
+    setFormData({
+      nom: '',
+      email: '',
+      password: '',
+      role: 'user'
+    });
+    setError('');
+    setSuccess('');
+  };
+
   if (loading) {
     return (
       <ProtectedRoute requiredRole="admin">
         <div className="min-h-screen bg-gray-50">
-          <Navigation />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
           </div>
@@ -171,8 +182,6 @@ export default function AdminUtilisateursPage() {
   return (
     <ProtectedRoute requiredRole="admin">
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="flex justify-between items-center mb-8">
@@ -216,7 +225,8 @@ export default function AdminUtilisateursPage() {
                         type="text"
                         value={formData.nom}
                         onChange={(e) => setFormData({...formData, nom: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: Jean Dupont"
                         required
                       />
                     </div>
@@ -229,7 +239,8 @@ export default function AdminUtilisateursPage() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder="Ex: jean.dupont@exemple.com"
                         required
                       />
                     </div>
@@ -242,7 +253,8 @@ export default function AdminUtilisateursPage() {
                         type="password"
                         value={formData.password}
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 px-3 py-2"
+                        placeholder={isEditing ? "Laissez vide pour ne pas changer" : "Minimum 6 caractères"}
                         required={!isEditing}
                       />
                     </div>
@@ -254,7 +266,7 @@ export default function AdminUtilisateursPage() {
                       <select
                         value={formData.role}
                         onChange={(e) => setFormData({...formData, role: e.target.value as 'admin' | 'user'})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="mt-1 block w-full border-gray-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 px-3 py-2"
                       >
                         <option value="user">Utilisateur</option>
                         <option value="admin">Administrateur</option>
@@ -265,7 +277,7 @@ export default function AdminUtilisateursPage() {
                   <div className="flex justify-end space-x-3">
                     <button
                       type="button"
-                      onClick={resetForm}
+                      onClick={handleCancel}
                       className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                     >
                       Annuler

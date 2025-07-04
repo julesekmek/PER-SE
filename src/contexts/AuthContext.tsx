@@ -57,10 +57,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('user');
   };
 
+  const updateProfile = async (nom: string, email: string, password?: string): Promise<{ success: boolean; message: string }> => {
+    if (!user) {
+      return { success: false, message: 'Utilisateur non connecté' };
+    }
+
+    try {
+      const response = await fetch('/api/users/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          nom, 
+          email, 
+          password,
+          userId: user.id 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Mettre à jour l'utilisateur dans le contexte et le localStorage
+        const updatedUser = { ...user, nom: data.user.nom, email: data.user.email };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.error || 'Erreur lors de la mise à jour' };
+      }
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du profil:', error);
+      return { success: false, message: 'Erreur de connexion' };
+    }
+  };
+
   const value: AuthContextType = {
     user,
     login,
     logout,
+    updateProfile,
     isAuthenticated,
   };
 

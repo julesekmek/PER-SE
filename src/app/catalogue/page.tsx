@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import Navigation from '@/components/Navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import CatalogueControls from '@/components/CatalogueControls';
 import ArticleCard from '@/components/ArticleCard';
@@ -75,13 +74,10 @@ export default function CataloguePage() {
     return sorted;
   }, [articles, selectedType, sortBy]);
 
-
-
   if (loading) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50">
-          <Navigation />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
           </div>
@@ -93,12 +89,10 @@ export default function CataloguePage() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">
-              Catalogue d'Armement
+              Marketplace
             </h1>
             
             {error && (
