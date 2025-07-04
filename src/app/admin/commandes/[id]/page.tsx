@@ -6,6 +6,7 @@ import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Badge from '@/components/ui/Badge';
+import Alert from '@/components/ui/Alert';
 import { getOrderById, updateOrderStatus } from '@/hooks/useOrders';
 import { useAuth } from '@/contexts/AuthContext';
 import { OrderStatus } from '@/types';

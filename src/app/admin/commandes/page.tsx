@@ -7,6 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
+import Toast from '@/components/ui/Toast';
 import { useAllOrders } from '@/hooks/useOrders';
 import { useAuth } from '@/contexts/AuthContext';
 import { OrderStatus } from '@/types';
@@ -186,8 +187,8 @@ function OrderRow({
 
 export default function AdminCommandesPage() {
   const { user } = useAuth();
-  const { orders, loading, error, updateOrderStatus } = useAllOrders();
-  const [updateMessage, setUpdateMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const { orders, loading, error, updateOrderStatus, deleteOrder } = useAllOrders();
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [users, setUsers] = useState<any[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
@@ -230,27 +231,22 @@ export default function AdminCommandesPage() {
     try {
       const success = await updateOrderStatus(orderId, newStatus);
       if (success) {
-        setUpdateMessage({
+        setToast({
           type: 'success',
           message: 'Statut mis à jour avec succès'
         });
       } else {
-        setUpdateMessage({
+        setToast({
           type: 'error',
           message: 'Erreur lors de la mise à jour du statut'
         });
       }
     } catch (error) {
-      setUpdateMessage({
+      setToast({
         type: 'error',
         message: 'Erreur lors de la mise à jour du statut'
       });
     }
-
-    // Masquer le message après 3 secondes
-    setTimeout(() => {
-      setUpdateMessage(null);
-    }, 3000);
   };
 
   const handleShowDeleteModal = (orderId: string) => {
@@ -262,45 +258,29 @@ export default function AdminCommandesPage() {
     if (!orderToDelete) return;
 
     try {
-      // Charger les commandes actuelles
-      const response = await fetch('/api/orders');
-      if (!response.ok) {
-        throw new Error('Erreur lors du chargement des commandes');
-      }
+      const success = await deleteOrder(orderToDelete);
       
-      const allOrders = await response.json();
-      const updatedOrders = allOrders.filter((order: any) => order.id !== orderToDelete);
-      
-      // Sauvegarder les commandes mises à jour
-      const saveResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedOrders),
-      });
-      
-      if (saveResponse.ok) {
-        setUpdateMessage({
+      if (success) {
+        setToast({
           type: 'success',
           message: 'Commande supprimée avec succès'
         });
-        // Recharger la page pour mettre à jour la liste
-        window.location.reload();
+        
+        // Fermer le modal
+        setShowDeleteModal(false);
+        setOrderToDelete(null);
       } else {
-        throw new Error('Erreur lors de la suppression');
+        setToast({
+          type: 'error',
+          message: 'Erreur lors de la suppression de la commande'
+        });
       }
     } catch (error) {
-      setUpdateMessage({
+      setToast({
         type: 'error',
         message: 'Erreur lors de la suppression de la commande'
       });
     }
-
-    // Masquer le message après 3 secondes
-    setTimeout(() => {
-      setUpdateMessage(null);
-    }, 3000);
   };
 
   if (loading) {
@@ -332,11 +312,14 @@ export default function AdminCommandesPage() {
               </Alert>
             )}
 
-            {updateMessage && (
-              <Alert type={updateMessage.type} className="mb-6">
-                {updateMessage.message}
-              </Alert>
-            )}
+            {/* Toast de notification */}
+            <Toast
+              message={toast?.message || ''}
+              type={toast?.type || 'info'}
+              isVisible={!!toast}
+              onClose={() => setToast(null)}
+              duration={3000}
+            />
 
             {orders.length === 0 ? (
               <div className="bg-white rounded-lg shadow p-8 text-center">

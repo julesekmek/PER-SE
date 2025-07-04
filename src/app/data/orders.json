@@ -1,82 +1,12 @@
 [
   {
-    "id": "CMD-1751632336715-ghxicjpsf",
-    "userId": 1,
-    "date": "2025-07-04T12:32:16.715Z",
-    "articles": [
-      {
-        "articleId": 1,
-        "nom": "Fusil d'assaut AK-47",
-        "quantity": 3,
-        "stock": 4
-      }
-    ],
-    "statut": "Expédié"
-  },
-  {
-    "id": "CMD-1751632509909-bxcsjwyxt",
-    "userId": 1,
-    "date": "2025-07-04T12:35:09.909Z",
-    "articles": [
-      {
-        "articleId": 1,
-        "nom": "Fusil d'assaut AK-47",
-        "quantity": 2,
-        "stock": 4
-      }
-    ],
-    "statut": "En cours"
-  },
-  {
-    "id": "CMD-2025-001",
-    "userId": 1,
-    "date": "2025-07-04T12:44:34.056Z",
-    "articles": [
-      {
-        "articleId": 1,
-        "nom": "Fusil d'assaut AK-47",
-        "quantity": 4,
-        "stock": 4
-      }
-    ],
-    "statut": "Expédié"
-  },
-  {
-    "id": "CMD-2025-002",
-    "userId": 2,
-    "date": "2025-07-04T13:11:40.280Z",
-    "articles": [
-      {
-        "articleId": 1,
-        "nom": "Fusil d'assaut AK-47",
-        "quantity": 3,
-        "stock": 4
-      }
-    ],
-    "statut": "En cours"
-  },
-  {
-    "id": "CMD-2025-003",
-    "userId": 2,
-    "date": "2025-07-04T13:14:47.072Z",
-    "articles": [
-      {
-        "articleId": 1,
-        "nom": "Fusil d'assaut AK-47",
-        "quantity": 3,
-        "stock": 4
-      }
-    ],
-    "statut": "En cours"
-  },
-  {
     "id": "CMD-2025-004",
     "userId": 2,
     "date": "2025-07-04T13:23:24.639Z",
     "articles": [
       {
         "articleId": 6,
-        "nom": "Bomba atomique",
+        "nom": "Bomba atomica",
         "quantity": 7,
         "stock": 12
       }
@@ -118,7 +48,7 @@
     "articles": [
       {
         "articleId": 6,
-        "nom": "Bomba atomique",
+        "nom": "Bomba atomica",
         "quantity": 2,
         "stock": 12
       }
@@ -181,5 +111,65 @@
       }
     ],
     "statut": "En attente de validation"
+  },
+  {
+    "id": "CMD-2025-012",
+    "userId": 2,
+    "date": "2025-07-04T15:04:56.487Z",
+    "articles": [
+      {
+        "articleId": 5,
+        "nom": "Lance-grenades M203",
+        "quantity": 3,
+        "stock": 12,
+        "prix": 3200
+      }
+    ],
+    "statut": "Expédié"
+  },
+  {
+    "id": "CMD-2025-013",
+    "userId": 2,
+    "date": "2025-07-04T15:18:07.467Z",
+    "articles": [
+      {
+        "articleId": 5,
+        "nom": "Lance-grenades M203",
+        "quantity": 2,
+        "stock": 6,
+        "prix": 3200
+      }
+    ],
+    "statut": "En attente de validation"
+  },
+  {
+    "userId": 2,
+    "date": "2025-07-04T15:19:51.801Z",
+    "articles": [
+      {
+        "articleId": 6,
+        "nom": "Bomba atomique",
+        "quantity": 3,
+        "stock": 12,
+        "prix": 150000
+      }
+    ],
+    "statut": "En attente de validation",
+    "id": "CMD-2025-014"
+  },
+  {
+    "userId": 2,
+    "date": "2025-07-04T15:21:54.036Z",
+    "articles": [
+      {
+        "articleId": 4,
+        "nom": "Mitrailleuse M249",
+        "quantity": 3,
+        "stock": 5,
+        "prix": 8500
+      }
+    ],
+    "statut": "En attente de validation",
+    "id": "CMD-2025-015"
   }
 ]

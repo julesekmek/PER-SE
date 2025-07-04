@@ -26,7 +26,7 @@
     "descriptionCourte": "Mitrailleuse légère de calibre 5.56mm",
     "descriptionLongue": "La M249 est une mitrailleuse légère américaine. Elle fournit un appui-feu soutenu et est utilisée par l'infanterie pour couvrir les mouvements.",
     "image": "/images/m249.jpg",
-    "stock": 5,
+    "stock": 2,
     "prix": 8500
   },
   {
@@ -36,7 +36,7 @@
     "descriptionCourte": "Lance-grenades sous-tube de 40mm",
     "descriptionLongue": "Le M203 est un lance-grenades qui se monte sous le canon d'un fusil d'assaut. Il permet de lancer des grenades à fragmentation ou à fumée.",
     "image": "/images/m203.jpg",
-    "stock": 12,
+    "stock": 4,
     "prix": 3200
   },
   {
@@ -46,7 +46,7 @@
     "descriptionCourte": "C'est une bombe",
     "descriptionLongue": "C'est une bombe de zinzin qui explose et.boummm",
     "image": "",
-    "stock": 12,
+    "stock": 9,
     "prix": 150000
   },
   {

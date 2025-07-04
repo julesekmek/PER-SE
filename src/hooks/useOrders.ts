@@ -3,29 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Order, CartItem, Article } from '@/types';
 
-// Fonction utilitaire pour générer un ID unique avec format CMD-YYYY-XXX
-const generateOrderId = async (): Promise<string> => {
-  try {
-    const response = await fetch('/api/orders');
-    if (response.ok) {
-      const existingOrders = await response.json();
-      const currentYear = new Date().getFullYear();
-      const yearOrders = existingOrders.filter((order: any) => 
-        order.id.startsWith(`CMD-${currentYear}-`)
-      );
-      const nextNumber = yearOrders.length + 1;
-      return `CMD-${currentYear}-${nextNumber.toString().padStart(3, '0')}`;
-    }
-  } catch (error) {
-    console.error('Erreur lors de la génération de l\'ID:', error);
-  }
-  
-  // Fallback si erreur
-  const currentYear = new Date().getFullYear();
-  const timestamp = Date.now();
-  return `CMD-${currentYear}-${(timestamp % 1000).toString().padStart(3, '0')}`;
-};
-
 // Fonction pour charger les commandes depuis le fichier JSON
 const loadOrders = async (): Promise<Order[]> => {
   try {
@@ -124,21 +101,21 @@ export function useAllOrders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const allOrders = await loadOrders();
-        setOrders(allOrders);
-        setError(null);
-      } catch (err) {
-        setError('Erreur lors du chargement des commandes');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const allOrders = await loadOrders();
+      setOrders(allOrders);
+      setError(null);
+    } catch (err) {
+      setError('Erreur lors du chargement des commandes');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchOrders();
   }, []);
 
@@ -160,7 +137,29 @@ export function useAllOrders() {
     }
   };
 
-  return { orders, loading, error, updateOrderStatus };
+  const deleteOrder = async (orderId: string): Promise<boolean> => {
+    try {
+      const updatedOrders = orders.filter(order => order.id !== orderId);
+      const success = await saveOrders(updatedOrders);
+      if (success) {
+        setOrders(updatedOrders);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la commande:', error);
+      return false;
+    }
+  };
+
+  return { 
+    orders, 
+    loading, 
+    error, 
+    updateOrderStatus, 
+    deleteOrder,
+    refetch: fetchOrders 
+  };
 }
 
 // Hook pour créer une nouvelle commande
@@ -177,18 +176,16 @@ export function useCreateOrder() {
       setLoading(true);
       setError(null);
 
-      // Vérifier le stock disponible
+      // Vérifier le stock disponible côté client (validation préliminaire)
       const stockErrors: string[] = [];
       const orderArticles = cartItems.map(item => {
         const article = articles.find(a => a.id === item.articleId);
         if (!article) {
           throw new Error(`Article ${item.articleId} non trouvé`);
         }
-        
         if (item.quantity > article.stock) {
           stockErrors.push(`${article.nom}: quantité demandée (${item.quantity}) > stock disponible (${article.stock})`);
         }
-        
         return {
           articleId: item.articleId,
           nom: article.nom,
@@ -197,30 +194,33 @@ export function useCreateOrder() {
           prix: article.prix
         };
       });
-
       if (stockErrors.length > 0) {
         throw new Error(`Stock insuffisant pour: ${stockErrors.join(', ')}`);
       }
-
-      // Créer la nouvelle commande
-      const newOrder: Order = {
-        id: await generateOrderId(),
+      // Créer la nouvelle commande SANS ID (le backend l'attribue)
+      const newOrder: Omit<Order, 'id'> & Partial<Pick<Order, 'id'>> = {
         userId,
         date: new Date().toISOString(),
         articles: orderArticles,
         statut: 'En attente de validation'
       };
-
-      // Charger les commandes existantes et ajouter la nouvelle
-      const existingOrders = await loadOrders();
-      const updatedOrders = [...existingOrders, newOrder];
-      
-      const success = await saveOrders(updatedOrders);
-      if (!success) {
-        throw new Error('Erreur lors de la sauvegarde de la commande');
+      // Envoyer la commande avec validation de stock côté serveur
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'new_order',
+          order: newOrder
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors de la création de la commande');
       }
-
-      return newOrder;
+      const result = await response.json();
+      return result.order || null;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la création de la commande';
       setError(errorMessage);

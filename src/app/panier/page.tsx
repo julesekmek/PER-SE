@@ -131,8 +131,6 @@ export default function PanierPage() {
               </Alert>
             )}
 
-
-
             {stockIssues.length > 0 && (
               <Alert type="error" className="mb-6">
                 <div>
@@ -140,7 +138,7 @@ export default function PanierPage() {
                   <ul className="mt-2 list-disc list-inside">
                     {stockIssues.map(item => (
                       <li key={item.articleId}>
-                        {item.article?.nom} : quantité demandée ({item.quantity}) > stock disponible ({item.article?.stock})
+                        {item.article?.nom} : quantité demandée ({item.quantity}) &gt; stock disponible ({item.article?.stock})
                       </li>
                     ))}
                   </ul>

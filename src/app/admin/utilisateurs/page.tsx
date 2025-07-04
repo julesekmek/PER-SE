@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { User } from '@/types';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 
 export default function AdminUtilisateursPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -17,6 +18,8 @@ export default function AdminUtilisateursPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     loadUsers();
@@ -107,23 +110,28 @@ export default function AdminUtilisateursPage() {
   };
 
   const handleDelete = async (userId: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      try {
-        const response = await fetch(`/api/users/${userId}`, {
-          method: 'DELETE',
-        });
+    setUserToDelete(userId);
+    setShowDeleteModal(true);
+  };
 
-        if (response.ok) {
-          setSuccess('Utilisateur supprimé avec succès');
-          loadUsers(); // Recharger la liste
-        } else {
-          const data = await response.json();
-          setError(data.error || 'Erreur lors de la suppression');
-        }
-      } catch (error) {
-        setError('Une erreur est survenue');
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
+    try {
+      const response = await fetch(`/api/users/${userToDelete}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setSuccess('Utilisateur supprimé avec succès');
+        loadUsers();
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Erreur lors de la suppression');
       }
+    } catch (error) {
+      setError('Une erreur est survenue');
     }
+    setUserToDelete(null);
+    setShowDeleteModal(false);
   };
 
   const handleEdit = (user: User) => {
@@ -374,6 +382,18 @@ export default function AdminUtilisateursPage() {
               </table>
             </div>
             </div>
+
+            {/* Modal de confirmation harmonisé */}
+            <ConfirmationModal
+              isOpen={showDeleteModal}
+              onClose={() => { setShowDeleteModal(false); setUserToDelete(null); }}
+              onConfirm={confirmDelete}
+              title="Supprimer l'utilisateur"
+              message={`Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.`}
+              confirmText="Supprimer"
+              cancelText="Annuler"
+              type="danger"
+            />
           </div>
         </div>
       </div>

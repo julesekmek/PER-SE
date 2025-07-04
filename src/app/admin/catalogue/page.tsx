@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Article } from '@/types';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 
 export default function AdminMarketplacePage() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -19,6 +20,8 @@ export default function AdminMarketplacePage() {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [articleToDelete, setArticleToDelete] = useState<number | null>(null);
 
   console.log('AdminMarketplacePage rendered, isAdding:', isAdding, 'isEditing:', isEditing);
 
@@ -107,23 +110,28 @@ export default function AdminMarketplacePage() {
   };
 
   const handleDelete = async (articleId: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
-      try {
-        const response = await fetch(`/api/articles/${articleId}`, {
-          method: 'DELETE',
-        });
+    setArticleToDelete(articleId);
+    setShowDeleteModal(true);
+  };
 
-        if (response.ok) {
-          setSuccess('Article supprimé avec succès');
-          loadArticles();
-        } else {
-          const data = await response.json();
-          setError(data.error || 'Erreur lors de la suppression');
-        }
-      } catch (error) {
-        setError('Une erreur est survenue');
+  const confirmDelete = async () => {
+    if (!articleToDelete) return;
+    try {
+      const response = await fetch(`/api/articles/${articleToDelete}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setSuccess('Article supprimé avec succès');
+        loadArticles();
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Erreur lors de la suppression');
       }
+    } catch (error) {
+      setError('Une erreur est survenue');
     }
+    setArticleToDelete(null);
+    setShowDeleteModal(false);
   };
 
   const handleEdit = (article: Article) => {
@@ -428,6 +436,18 @@ export default function AdminMarketplacePage() {
               </table>
             </div>
             </div>
+
+            {/* Modal de confirmation harmonisé */}
+            <ConfirmationModal
+              isOpen={showDeleteModal}
+              onClose={() => { setShowDeleteModal(false); setArticleToDelete(null); }}
+              onConfirm={confirmDelete}
+              title="Supprimer l'article"
+              message={`Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.`}
+              confirmText="Supprimer"
+              cancelText="Annuler"
+              type="danger"
+            />
           </div>
         </div>
       </div>
