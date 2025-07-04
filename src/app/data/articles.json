@@ -6,7 +6,7 @@
     "descriptionCourte": "Pistolet semi-automatique de calibre 9mm",
     "descriptionLongue": "Le Glock 17 est un pistolet semi-automatique autrichien. Il est apprécié pour sa légèreté, sa fiabilité et sa grande capacité de chargeur.",
     "image": "/images/glock17.jpg",
-    "stock": 8,
+    "stock": 4,
     "prix": 80.2
   },
   {
@@ -36,7 +36,7 @@
     "descriptionCourte": "Lance-grenades sous-tube de 40mm",
     "descriptionLongue": "Le M203 est un lance-grenades qui se monte sous le canon d'un fusil d'assaut. Il permet de lancer des grenades à fragmentation ou à fumée.",
     "image": "/images/m203.jpg",
-    "stock": 4,
+    "stock": 0,
     "prix": 3200
   },
   {
@@ -46,7 +46,7 @@
     "descriptionCourte": "C'est une bombe",
     "descriptionLongue": "C'est une bombe de zinzin qui explose et.boummm",
     "image": "",
-    "stock": 9,
+    "stock": 8,
     "prix": 150000
   },
   {
@@ -56,7 +56,7 @@
     "descriptionCourte": "Des",
     "descriptionLongue": "Desc detaille",
     "image": "",
-    "stock": 12,
+    "stock": 9,
     "prix": 1222
   }
 ]

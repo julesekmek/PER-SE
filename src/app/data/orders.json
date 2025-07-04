@@ -42,34 +42,6 @@
     "statut": "Expédié"
   },
   {
-    "id": "CMD-2025-007",
-    "userId": 2,
-    "date": "2025-07-04T13:26:31.075Z",
-    "articles": [
-      {
-        "articleId": 6,
-        "nom": "Bomba atomica",
-        "quantity": 2,
-        "stock": 12
-      }
-    ],
-    "statut": "Expédié"
-  },
-  {
-    "id": "CMD-2025-008",
-    "userId": 2,
-    "date": "2025-07-04T13:32:21.455Z",
-    "articles": [
-      {
-        "articleId": 5,
-        "nom": "Lance-grenades M203",
-        "quantity": 1,
-        "stock": 12
-      }
-    ],
-    "statut": "En cours"
-  },
-  {
     "id": "CMD-2025-009",
     "userId": 2,
     "date": "2025-07-04T13:32:28.635Z",
@@ -144,32 +116,91 @@
   },
   {
     "userId": 2,
-    "date": "2025-07-04T15:19:51.801Z",
+    "date": "2025-07-04T15:38:15.649Z",
     "articles": [
+      {
+        "articleId": 5,
+        "nom": "Lance-grenades M203",
+        "quantity": 3,
+        "stock": 4,
+        "prix": 3200
+      }
+    ],
+    "statut": "Expédié",
+    "id": "CMD-2025-016"
+  },
+  {
+    "userId": 2,
+    "date": "2025-07-04T15:50:14.835Z",
+    "articles": [
+      {
+        "articleId": 5,
+        "nom": "Lance-grenades M203",
+        "quantity": 1,
+        "stock": 1,
+        "prix": 3200
+      },
       {
         "articleId": 6,
         "nom": "Bomba atomique",
-        "quantity": 3,
-        "stock": 12,
+        "quantity": 1,
+        "stock": 9,
         "prix": 150000
       }
     ],
     "statut": "En attente de validation",
-    "id": "CMD-2025-014"
+    "id": "CMD-2025-017"
   },
   {
     "userId": 2,
-    "date": "2025-07-04T15:21:54.036Z",
+    "date": "2025-07-04T15:54:42.457Z",
     "articles": [
       {
-        "articleId": 4,
-        "nom": "Mitrailleuse M249",
-        "quantity": 3,
-        "stock": 5,
-        "prix": 8500
+        "articleId": 7,
+        "nom": "test post opti",
+        "quantity": 2,
+        "stock": 12,
+        "prix": 1222
       }
     ],
     "statut": "En attente de validation",
-    "id": "CMD-2025-015"
+    "id": "CMD-2025-018"
+  },
+  {
+    "userId": 2,
+    "date": "2025-07-04T15:59:27.737Z",
+    "articles": [
+      {
+        "articleId": 2,
+        "nom": "Pistolet Glock 17",
+        "quantity": 2,
+        "stock": 8,
+        "prix": 80.2
+      }
+    ],
+    "statut": "En attente de validation",
+    "id": "CMD-2025-019"
+  },
+  {
+    "userId": 2,
+    "date": "2025-07-04T16:18:31.272Z",
+    "articles": [
+      {
+        "articleId": 7,
+        "nom": "test post opti",
+        "quantity": 1,
+        "stock": 10,
+        "prix": 1222
+      },
+      {
+        "articleId": 2,
+        "nom": "Pistolet Glock 17",
+        "quantity": 2,
+        "stock": 6,
+        "prix": 80.2
+      }
+    ],
+    "statut": "En attente de validation",
+    "id": "CMD-2025-020"
   }
 ]

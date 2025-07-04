@@ -86,19 +86,7 @@ function UserMenu({ user, isOpen, onToggle, onClose, onLogout, onCompteClick, is
             → Mon compte
           </Link>
 
-          {user.role !== 'admin' && (
-            <Link
-              href="/mes-commandes"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('Clic sur Mes commandes');
-                onCompteClick();
-              }}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100"
-            >
-              → Mes commandes
-            </Link>
-          )}
+
           
           <button
             onClick={(e) => {
